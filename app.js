@@ -6,4 +6,15 @@ var express = require('express');
 
 var app = express(); // se define el servidor express
 
-app.listen(3000, () => {console.log('express online, 3000 port')}); // escuchar peticiones
+// rutas
+
+app.get('/', (req, res, next) => {
+    res.status(200).json({
+        ok: true,
+        mensaje: 'Petición relizada correctamente'
+    });
+});
+
+// escuchar peticiones
+
+app.listen(3000, () => {console.log('express online, 3000 port')}); // escuchar

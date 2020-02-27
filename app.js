@@ -1,10 +1,21 @@
 // required
 
-var express = require('express');
+let express = require('express');
+let mongoose = require('mongoose');
 
 // incializar variables
 
-var app = express(); // se define el servidor express
+let app = express(); // se define el servidor express
+
+// conexión a mongodb (base de datos)
+
+mongoose.connection.openUri('mongodb://localhost:27017/hospital', (err, resp) => {
+
+    if (err) throw err;
+
+    console.log('\x1b[36m%s\x1b[0m', 'database: conected');
+
+});
 
 // rutas
 
@@ -17,4 +28,9 @@ app.get('/', (req, res, next) => {
 
 // escuchar peticiones
 
-app.listen(3000, () => {console.log('express online, 3000 port')}); // escuchar
+app.listen(3000, () => {
+
+    console.log('\x1b[36m%s\x1b[0m', 'server: conected');
+
+
+}); // escuchar

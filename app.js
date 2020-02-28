@@ -9,7 +9,7 @@ let app = express(); // se define el servidor express
 
 // conexión a mongodb (base de datos)
 
-mongoose.connection.openUri('mongodb://localhost:27017/hospital', (err, resp) => {
+mongoose.connection.openUri('mongodb://localhost:27017/hospitalDB', (err, resp) => {
 
     if (err) throw err;
 

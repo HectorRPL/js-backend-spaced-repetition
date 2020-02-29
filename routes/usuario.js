@@ -46,7 +46,8 @@ app.post('/', (req, res) => {
     let usuario = new Usuario({
         nombre: body.nombre,
         email: body.email,
-        password: body.password // los passwors se tienen que encriptar
+        password: body.password, // los passwors se tienen que encriptar
+        role: body.role // los passwors se tienen que encriptar
     });
 
     usuario.save((err, usuarioCreado) => {

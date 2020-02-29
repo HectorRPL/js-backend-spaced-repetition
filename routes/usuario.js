@@ -1,5 +1,7 @@
 let express = require('express');
 
+let bcrypt = require('bcryptjs');
+
 let app = express();
 
 let Usuario = require('../models/usuario');
@@ -46,8 +48,8 @@ app.post('/', (req, res) => {
     let usuario = new Usuario({
         nombre: body.nombre,
         email: body.email,
-        password: body.password, // los passwors se tienen que encriptar
-        role: body.role // los passwors se tienen que encriptar
+        password: bcrypt.hashSync(body.password, 10), // los passwors se tienen que encriptar
+        role: body.role
     });
 
     usuario.save((err, usuarioCreado) => {

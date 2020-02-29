@@ -15,7 +15,7 @@ let usuarioSquema = new Squema({
 });
 
 usuarioSquema.plugin(uniqueValidator, {
-    message: 'El correo debe de ser único'
+    message: 'El {PATH} debe de ser único' // el {PATH} toma el key de la propiedad, así se puede ocupar en varios keys
 });
 
 module.exports = mongoose.model('Usuario', usuarioSquema);

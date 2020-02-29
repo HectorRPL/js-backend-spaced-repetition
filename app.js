@@ -2,10 +2,16 @@
 
 let express = require('express');
 let mongoose = require('mongoose');
+let bodyParser = require('body-parser');
 
 // incializar variables
 
 let app = express(); // se define el servidor express
+
+// BODYPARRSER
+// un mildqwaare es una petición que una vez que app se sejecute siempre va apasar por aqui
+app.use(bodyParser.urlencoded({extended: false})); // parse application/x-www-form-urlencoded
+app.use(bodyParser.json()); // parse application/json
 
 // importar rutas
 

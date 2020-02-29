@@ -4,12 +4,13 @@ let app = express();
 
 let Usuario = require('../models/usuario');
 
-app.get('/', (req, res, next) => {
+// get all
+app.get('/', (req, res, next) => { // TODO: de momento el next no lo usamos, pero debo saber que es.
 
         Usuario.find(
             {}, // trae todos los usuarios
             'role _id nombre email img', // tes para traer todos los campos menos el pass
-        ).exec(
+        ).exec( // TODO: sería importante conocer que es esto porque veo que se usa mucho en mongosse
             (err, usuarios) => {
 
                 if (err) {
@@ -36,5 +37,28 @@ app.get('/', (req, res, next) => {
 
     }
 );
+
+// post
+app.post('/', (req, res) => {
+
+    let body = req.body;
+
+    let usuario = new Usuario({
+        nombre: body.nombre,
+        email: body.email,
+        password: body.password // los passwors se tienen que encriptar
+    });
+
+    usuario.save((err, usuarioCreado) => {
+        if (err) {
+
+            return res.status(500).json(err);
+
+        }
+
+        res.status(200).json(usuarioCreado);
+    });
+
+});
 
 module.exports = app;

@@ -16,7 +16,8 @@ let usuarioSquema = new Squema({
     password: {type: String, require: [true, 'requerido']                      },
     img:      {type: String, require: false                                    },
     role:     {type: String, require: true,                default: 'USER_ROLE', enum: rolesValidos},
-    created:  {type: Date,                                 default: new Date() }
+    created:  {type: Date,                                 default: new Date() },
+    update:   {type: Date, require: false                                      }
 });
 
 usuarioSquema.plugin(uniqueValidator, {

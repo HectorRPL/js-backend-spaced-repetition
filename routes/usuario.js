@@ -64,4 +64,37 @@ app.post('/', (req, res) => {
 
 });
 
+// put
+app.put('/:id', (req, res) => {
+
+    Usuario.findById(req.params.id, (err, usuarioEncontrado) => {
+
+        if (err) {
+            return res.status(500).json(err);  // error cualquiera
+        }
+
+        if (!usuarioEncontrado) {
+            return res.status(404).json(err); // el usuario no existe
+        }
+
+        usuarioEncontrado.nombre = req.body.nombre;
+        usuarioEncontrado.email = req.body.email;
+        usuarioEncontrado.role = req.body.role;
+        usuarioEncontrado.update = new Date();
+
+        usuarioEncontrado.save((err, usuarioActualizado) => {
+
+            if (err) {
+                return res.status(500).json(err);  // error cualquiera
+            }
+
+            usuarioActualizado.password = null; // no es buena idea enviar estps datos, se soluciona con microservices
+            usuarioActualizado.role = null; // no es buena idea enviar estps datos, se soluciona con microservices
+
+            res.status(200).json(usuarioActualizado);
+
+        });
+    });
+});
+
 module.exports = app;

@@ -1,5 +1,7 @@
 let express = require('express');
 let bcrypt = require('bcryptjs');
+let jwt = require('jsonwebtoken'); // https://github.com/auth0/node-jsonwebtoken
+
 let app = express();
 let Usuario = require('../models/usuario');
 
@@ -19,10 +21,21 @@ app.post('/', (req, res) => {
             return res.status(404).json(false);
         }
 
-        res.status(200).json(usuario);
+        // create token
+
+        let token = jwt.sign(
+            {
+                usuario: usuario
+            },
+            'chester',
+            {
+                expiresIn: 14400 // en 4 horas vale verga el token
+            }
+        );
+
+        res.status(200).json(token);
 
     });
-
 
 
 });

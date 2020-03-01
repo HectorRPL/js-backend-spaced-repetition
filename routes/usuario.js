@@ -97,4 +97,16 @@ app.put('/:id', (req, res) => {
     });
 });
 
+// delete
+app.delete('/:id', (req, res) => {
+
+    Usuario.findOneAndRemove(req.body.id, (err, usuarioBorrado) => {
+        if (err) {
+            return res.status(500).json(err);  // error cualquiera
+        }
+        res.status(200).json(usuarioBorrado);
+    });
+
+});
+
 module.exports = app;

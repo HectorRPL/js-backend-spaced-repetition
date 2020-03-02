@@ -42,6 +42,23 @@ app.get('/', (req, res, next) => { // TODO: de momento el next no lo usamos, per
     }
 );
 
+// find one
+app.get('/:id', mdAutenticacion.verificaToken, (req, res) => {
+
+    Usuario.findById(req.params.id, (err, usuarioEncontrado) => {
+
+        if (err) {
+            return res.status(500).json(err);  // error cualquiera
+        }
+
+        if (!usuarioEncontrado) {
+            return res.status(404).json(false); // usuario no encontrado
+        }
+
+        res.status(200).json(usuarioEncontrado);
+    });
+});
+
 // post
 app.post(
     '/',

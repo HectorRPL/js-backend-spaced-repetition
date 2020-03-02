@@ -6,6 +6,9 @@ let app = express();
 
 let Usuario = require('../models/usuario');
 
+let jwt = require('jsonwebtoken'); // https://github.com/auth0/node-jsonwebtoken
+const SEED = require('../config/config');
+
 // get all
 app.get('/', (req, res, next) => { // TODO: de momento el next no lo usamos, pero debo saber que es.
 
@@ -39,6 +42,24 @@ app.get('/', (req, res, next) => { // TODO: de momento el next no lo usamos, per
 
     }
 );
+
+// verificar token
+app.use('/', (req, res, next) => {
+
+    let token = req.query.token;
+
+    jwt.verify(token, SEED, (err, decoded) => {
+
+        if (err) {
+
+            return res.status(401).json(err);  // error usuario no autorizado (token incorrecto)
+
+        }
+
+        next(); // necesario el next porque si no aquí se apra y no continua con lo demás
+
+    });
+});
 
 // post
 app.post('/', (req, res) => {

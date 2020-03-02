@@ -1,6 +1,10 @@
 let express = require('express');
 let bcrypt = require('bcryptjs');
 let jwt = require('jsonwebtoken'); // https://github.com/auth0/node-jsonwebtoken
+const SEED = require('../config/config');
+// Otras formas de importar SEED
+// const SEED = require('../config/config').SEDD;
+// const {SEED} = require('../config/config'); // o por desestructuración
 
 let app = express();
 let Usuario = require('../models/usuario');
@@ -25,11 +29,11 @@ app.post('/', (req, res) => {
 
         let token = jwt.sign(
             {
-                usuario: usuario
+                usuario: usuario // payload: https://www.youtube.com/watch?v=-VLwG2A_F4o https://es.wikipedia.org/wiki/Carga_%C3%BAtil_(inform%C3%A1tica)
             },
-            'chester',
+            SEED,
             {
-                expiresIn: 14400 // en 4 horas vale verga el token
+                expiresIn: (60 * 60) // tiempo que dura el token en segundos
             }
         );
 

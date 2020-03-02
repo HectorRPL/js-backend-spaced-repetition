@@ -6,8 +6,7 @@ let app = express();
 
 let Usuario = require('../models/usuario');
 
-let jwt = require('jsonwebtoken'); // https://github.com/auth0/node-jsonwebtoken
-const SEED = require('../config/config');
+let mdAutenticacion = require('../middelwares/autenticacion');
 
 // get all
 app.get('/', (req, res, next) => { // TODO: de momento el next no lo usamos, pero debo saber que es.
@@ -43,26 +42,10 @@ app.get('/', (req, res, next) => { // TODO: de momento el next no lo usamos, per
     }
 );
 
-// verificar token
-app.use('/', (req, res, next) => {
-
-    let token = req.query.token;
-
-    jwt.verify(token, SEED, (err, decoded) => {
-
-        if (err) {
-
-            return res.status(401).json(err);  // error usuario no autorizado (token incorrecto)
-
-        }
-
-        next(); // necesario el next porque si no aquí se apra y no continua con lo demás
-
-    });
-});
-
 // post
-app.post('/', (req, res) => {
+app.post(
+    '/',
+    (req, res) => {
 
     let body = req.body;
 
@@ -86,40 +69,49 @@ app.post('/', (req, res) => {
 });
 
 // put
-app.put('/:id', (req, res) => {
+app.put(
+    '/:id',
+    mdAutenticacion.verificaToken, // se puede mandar un arreglo de diddlewares que queremos que se ejecuten
+    (req, res) => {
 
-    Usuario.findById(req.params.id, (err, usuarioEncontrado) => {
-
-        if (err) {
-            return res.status(500).json(err);  // error cualquiera
-        }
-
-        if (!usuarioEncontrado) {
-            return res.status(404).json(err); // el usuario no existe
-        }
-
-        usuarioEncontrado.nombre = req.body.nombre;
-        usuarioEncontrado.email = req.body.email;
-        usuarioEncontrado.role = req.body.role;
-        usuarioEncontrado.update = new Date();
-
-        usuarioEncontrado.save((err, usuarioActualizado) => {
+        Usuario.findById(req.params.id, (err, usuarioEncontrado) => {
 
             if (err) {
                 return res.status(500).json(err);  // error cualquiera
             }
 
-            usuarioActualizado.password = null; // no es buena idea enviar estps datos, se soluciona con microservices
-            usuarioActualizado.role = null; // no es buena idea enviar estps datos, se soluciona con microservices
+            if (!usuarioEncontrado) {
+                return res.status(404).json(err); // el usuario no existe
+            }
 
-            res.status(200).json(usuarioActualizado);
+            usuarioEncontrado.nombre = req.body.nombre;
+            usuarioEncontrado.email = req.body.email;
+            usuarioEncontrado.role = req.body.role;
+            usuarioEncontrado.update = new Date();
 
+            usuarioEncontrado.save((err, usuarioActualizado) => {
+
+                if (err) {
+                    return res.status(500).json(err);  // error cualquiera
+                }
+
+                usuarioActualizado.password = null; // no es buena idea enviar estps datos, se soluciona con microservices
+                usuarioActualizado.role = null; // no es buena idea enviar estps datos, se soluciona con microservices
+
+                const usuarioToken = req.usuario;
+                console.log({usuarioToken});
+
+                res.status(200).json(usuarioActualizado);
+
+            });
         });
     });
-});
 
 // delete
-app.delete('/:id', (req, res) => {
+app.delete(
+    '/:id',
+    mdAutenticacion.verificaToken, // TODO ¿Por qué no se mandan los parámetros (req, res, next) de verificaToken()?
+    (req, res) => {
 
     Usuario.findOneAndRemove(req.body.id, (err, usuarioBorrado) => {
         if (err) {

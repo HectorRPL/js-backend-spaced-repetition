@@ -1,3 +1,6 @@
+
+const PORT = process.env.PORT || 3000;
+
 // required
 
 let express = require('express');
@@ -37,6 +40,6 @@ app.use('/', appRoutes);
 
 // escuchar peticiones
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
     console.log('\x1b[36m%s\x1b[0m', 'server: conected');
 }); // escuchar

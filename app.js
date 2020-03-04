@@ -21,7 +21,7 @@ let loginRoutes = require('./routes/login');
 
 // conexión a mongodb (base de datos)
 
-mongoose.connection.openUri('mongodb://localhost:27017/hospitalDB', (err, resp) => {
+mongoose.connection.openUri('mongodb://hectorvizuet:1234qwer@ds141178.mlab.com:41178/hospital', (err, resp) => {
 
     if (err) throw err;
 

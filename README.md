@@ -7,7 +7,15 @@ Correr el demonio de mongo
 To start server:
 
     npm start
+    
+Importante para desarrollar localmente hay que añadir el nodemon al "start" en el package.json, ejemplo
 
+      "scripts": {
+        "start": "nodemon app.js",
+        otras cosas ...
+      }, 
+
+No se ocurra darle commit, porque se va a heroku y vale madres, porque no puede encontarr el nodemon
 
 * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 * 
@@ -28,3 +36,4 @@ Luego agregamso express con el comando:
     npm intall express --save
     
 Una vez instalado se importa en el index.js, para el caso de este proyecto en app.js
+

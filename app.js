@@ -20,6 +20,7 @@ app.use(bodyParser.json()); // parse application/json
 
 let appRoutes = require('./routes/app');
 let usuarioRoutes = require('./routes/usuario');
+let hospitalRoutes = require('./routes/hospital');
 let loginRoutes = require('./routes/login');
 
 // conexión a mongodb (base de datos)
@@ -38,6 +39,7 @@ mongoose.connection.openUri(urlMongoMlab, (err, resp) => {
 // rutas
 
 app.use('/usuario', usuarioRoutes);
+app.use('/hospital', hospitalRoutes);
 app.use('/login', loginRoutes);
 app.use('/', appRoutes);
 

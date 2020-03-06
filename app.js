@@ -20,6 +20,7 @@ app.use(bodyParser.json()); // parse application/json
 
 let appRoutes = require('./routes/app');
 let usuarioRoutes = require('./routes/usuario');
+let medicoRoutes = require('./routes/medico');
 let hospitalRoutes = require('./routes/hospital');
 let loginRoutes = require('./routes/login');
 
@@ -39,6 +40,7 @@ mongoose.connection.openUri(urlMongoMlab, (err, resp) => {
 // rutas
 
 app.use('/usuario', usuarioRoutes);
+app.use('/medico', medicoRoutes);
 app.use('/hospital', hospitalRoutes);
 app.use('/login', loginRoutes);
 app.use('/', appRoutes);

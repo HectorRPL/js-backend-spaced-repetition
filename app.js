@@ -26,7 +26,7 @@ let loginRoutes = require('./routes/login');
 // conexión a mongodb (base de datos)
 
 const urlMongoLocal = 'mongodb://localhost:27017/hospitalDB'; // Conectarse localmente, no olvidar invocar al demonio
-const urlMongoMlab = 'mongodb://localhost:27017/hospitalDB'; // conectarse a mlab mucho mejor =)
+const urlMongoMlab = 'mongodb://hectorvizuet:1234qwer@ds141178.mlab.com:41178/hospital'; // conectarse a mlab mucho mejor =)
 
 mongoose.connection.openUri(urlMongoMlab, (err, resp) => {
 

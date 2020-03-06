@@ -83,6 +83,24 @@ app.put(
     }
 );
 
+app.delete(
+    '/:id',
+    mdAutenticacion.verificaToken,
+    (req, res) => {
+
+        Hospital.findOneAndRemove(req.body.id, (err, hospitalEliminado) => {
+
+            if (err) {
+                return res.status(500).json(err);  // error cualquiera
+            }
+
+            res.status(200).json(hospitalEliminado);
+
+        });
+
+    }
+);
+
 module.exports = app; // NUNCA OLVIDAR EXPORTAR. Propongo el siguinete procedimeinto:
 
 /*

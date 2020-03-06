@@ -37,7 +37,10 @@ app.post('/', (req, res) => {
             }
         );
 
-        res.status(200).json(token);
+        res.status(200).json({
+            token: token,
+            usuario: usuario // TODO: no mandes datos sensibles, aqui mandas hasta el pass
+        });
 
     });
 

@@ -6,7 +6,7 @@ const app = express();
 
 const Hospital = require('../models/hospital');
 
-
+let mdAutenticacion = require('../middelwares/autenticacion');
 
 // gel all
 
@@ -23,6 +23,28 @@ app.get('/', (req, res) => {
             }
         );
 
+    });
+});
+
+// post
+
+app.post(
+    '',
+    mdAutenticacion.verificaToken,
+    (req, res) => {
+    const hospital = new Hospital({
+        nombre: req.body.nombre,
+        usuario: req.body.usuario
+    });
+
+    hospital.save((err, hospitalCreado) => {
+        if (err) {
+
+            return res.status(500).json(err);
+
+        }
+
+        res.status(200).json(hospitalCreado);
     });
 });
 

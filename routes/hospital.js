@@ -1,7 +1,6 @@
 const express = require('express');
 
 
-
 const app = express();
 
 const Hospital = require('../models/hospital');
@@ -11,19 +10,41 @@ let mdAutenticacion = require('../middelwares/autenticacion');
 // gel all
 
 app.get('/', (req, res) => {
-    Hospital.find({}, 'nombre').exec((err, hospitales) => { // TODO: aunque no le ponga props las manda, como la fecha.
+    Hospital.find({})
+        .populate('usuarioId', 'nombre email') //
+        .exec((err, hospitales) => { // TODO: aunque no le ponga props las manda, como la fecha.
+
+            if (err) {
+                return res.status(500).json(err);
+            }
+
+            res.status(200).json({
+                    ok: true, // TODO: Aqui mejor ponemos la paginación
+                    hospitales: hospitales
+                }
+            );
+
+        });
+});
+
+
+// gel one
+
+app.get('/:id', mdAutenticacion.verificaToken, (req, res) => {
+
+    Hospital.findById(req.params.id, (err, hospitalEncontrado) => {
 
         if (err) {
-            return res.status(500).json(err);
+            return res.status(500).json(err);  // error cualquiera
         }
 
-        res.status(200).json({
-                ok: true, // TODO: Aqui mejor ponemos la paginación
-                hospitales: hospitales
-            }
-        );
+        if (!hospitalEncontrado) {
+            return res.status(404).json(false); // hospital no encontrado
+        }
 
+        res.status(200).json(hospitalEncontrado);
     });
+
 });
 
 // post
@@ -32,21 +53,21 @@ app.post(
     '',
     mdAutenticacion.verificaToken,
     (req, res) => {
-    const hospital = new Hospital({
-        nombre: req.body.nombre,
-        usuario: req.body.usuario
+        const hospital = new Hospital({
+            nombre: req.body.nombre,
+            usuarioId: req.body.usuarioId
+        });
+
+        hospital.save((err, hospitalCreado) => {
+            if (err) {
+
+                return res.status(500).json(err);
+
+            }
+
+            res.status(200).json(hospitalCreado);
+        });
     });
-
-    hospital.save((err, hospitalCreado) => {
-        if (err) {
-
-            return res.status(500).json(err);
-
-        }
-
-        res.status(200).json(hospitalCreado);
-    });
-});
 
 
 // put

@@ -20,7 +20,7 @@ const hospitalSchema = new Schema({
             type: String,
             required: false
         },
-        usuario: {
+        usuarioId: {
             type: Schema.Types.ObjectId,
             ref: 'Usuario'
         },
@@ -42,4 +42,4 @@ hospitalSchema.plugin(uniqueValidator, {
     message: 'El {PATH} debe ser único'
 });
 
-module.exports = mongoose.model('hospital', hospitalSchema);
+module.exports = mongoose.model('Hospital', hospitalSchema);

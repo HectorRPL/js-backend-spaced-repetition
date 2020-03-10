@@ -42,4 +42,4 @@ const medicoSchema = new Schema({
 );
 
 
-module.exports = mongoose.model('medico', medicoSchema);
+module.exports = mongoose.model('Medico', medicoSchema);

@@ -11,7 +11,10 @@ const mdAutenticacion = require('../middelwares/autenticacion');
 // get all
 
 app.get('/', (req, res) => {
-    Medico.find({}, 'nombre').exec((err, medicos) => { // TODO: aunque no le ponga props las manda, como la fecha.
+    Medico.find({})
+        .populate('usuarioId', 'nombre email')
+        .populate('hospitalId')
+        .exec((err, medicos) => {
 
         if (err) {
             return res.status(500).json(err);

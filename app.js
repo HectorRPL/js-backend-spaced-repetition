@@ -23,6 +23,7 @@ let usuarioRoutes = require('./routes/usuario');
 let medicoRoutes = require('./routes/medico');
 let hospitalRoutes = require('./routes/hospital');
 let loginRoutes = require('./routes/login');
+let busquedaRoutes = require('./routes/busqueda');
 
 // conexión a mongodb (base de datos)
 
@@ -43,6 +44,9 @@ app.use('/usuario', usuarioRoutes);
 app.use('/medico', medicoRoutes);
 app.use('/hospital', hospitalRoutes);
 app.use('/login', loginRoutes);
+
+app.use('/busqueda', busquedaRoutes);
+
 app.use('/', appRoutes);
 
 // escuchar peticiones

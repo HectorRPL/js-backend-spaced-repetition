@@ -1,7 +1,6 @@
 const express = require('express');
 
 
-
 const app = express();
 
 const Medico = require('../models/medico');
@@ -12,21 +11,26 @@ const mdAutenticacion = require('../middelwares/autenticacion');
 
 app.get('/', (req, res) => {
     Medico.find({})
+        .skip(Number(req.query.desde) || 0) // apartir de aqui comienza a contar, si le mando un 10 entonces con el .limit() me trae los 15
+        .limit(5) // solo envia 5 registros por cada petición
         .populate('usuarioId', 'nombre email')
         .populate('hospitalId')
         .exec((err, medicos) => {
 
-        if (err) {
-            return res.status(500).json(err);
-        }
-
-        res.status(200).json({
-                ok: true, // TODO: Aqui mejor ponemos la paginación
-                medicos: medicos
+            if (err) {
+                return res.status(500).json(err);
             }
-        );
 
-    });
+            Medico.count({}, (err, conteo) => {
+                res.status(200).json({
+                        ok: true, // TODO: Aqui mejor ponemos la paginación
+                        medicos: medicos,
+                        rows: conteo
+                    }
+                );
+            });
+
+        });
 });
 
 // post

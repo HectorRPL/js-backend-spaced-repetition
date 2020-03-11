@@ -11,33 +11,39 @@ let mdAutenticacion = require('../middelwares/autenticacion');
 // get all
 app.get('/', (req, res, next) => { // TODO: de momento el next no lo usamos, pero debo saber que es.
 
+        const desde = Number(req.query.desde) || 0;
+
         Usuario.find(
             {}, // trae todos los usuarios
-            'role _id nombre email img', // tes para traer todos los campos menos el pass
-        ).exec( // TODO: sería importante conocer que es esto porque veo que se usa mucho en mongosse
-            (err, usuarios) => {
+            'role _id nombre email img') // tes para traer todos los campos menos el pass
+            .skip(desde) // apartir de aqui comienza a contar, si le mando un 10 entonces con el .limit() me trae los 15
+            .limit(5) // solo envia 5 registros por cada petición
+            .exec( // TODO: sería importante conocer que es esto porque veo que se usa mucho en mongosse
+                (err, usuarios) => {
 
-                if (err) {
-                    return res.status(500)
-                        .json(
-                            { // res = responde con un 500
-                                ok: false,
-                                mensaje: 'Error al intentar obtener el usuario.',
-                                errors: err
-                            }
-                        );
+                    if (err) {
+                        return res.status(500)
+                            .json(
+                                { // res = responde con un 500
+                                    ok: false,
+                                    mensaje: 'Error al intentar obtener el usuario.',
+                                    errors: err
+                                }
+                            );
+                    }
+
+                    Usuario.count({}, (err, conteo) => {
+                        res.status(200) // responde con un 200
+                            .json( // se declara que enviaráá un json
+                                { // [ini] obj
+                                    ok: true,
+                                    usuarios: usuarios, // como prop el obj usuarios en []
+                                    rows: conteo
+                                } // [end] obj
+                            );
+                    });
                 }
-
-                res.status(200) // responde con un 200
-                    .json( // se declara que enviaráá un json
-                        { // [ini] obj
-                            ok: true,
-                            usuarios: usuarios // como prop el obj usuarios en []
-                        } // [end] obj
-                    );
-
-            }
-        );
+            );
 
     }
 );
@@ -64,26 +70,26 @@ app.post(
     '/',
     (req, res) => {
 
-    let body = req.body;
+        let body = req.body;
 
-    let usuario = new Usuario({
-        nombre: body.nombre,
-        email: body.email,
-        password: bcrypt.hashSync(body.password, 10), // los passwors se tienen que encriptar
-        role: body.role
+        let usuario = new Usuario({
+            nombre: body.nombre,
+            email: body.email,
+            password: bcrypt.hashSync(body.password, 10), // los passwors se tienen que encriptar
+            role: body.role
+        });
+
+        usuario.save((err, usuarioCreado) => {
+            if (err) {
+
+                return res.status(500).json(err);
+
+            }
+
+            res.status(200).json(usuarioCreado);
+        });
+
     });
-
-    usuario.save((err, usuarioCreado) => {
-        if (err) {
-
-            return res.status(500).json(err);
-
-        }
-
-        res.status(200).json(usuarioCreado);
-    });
-
-});
 
 // put
 app.put(
@@ -130,13 +136,13 @@ app.delete(
     mdAutenticacion.verificaToken, // TODO ¿Por qué no se mandan los parámetros (req, res, next) de verificaToken()?
     (req, res) => {
 
-    Usuario.findOneAndRemove(req.body.id, (err, usuarioBorrado) => {
-        if (err) {
-            return res.status(500).json(err);  // error cualquiera
-        }
-        res.status(200).json(usuarioBorrado);
-    });
+        Usuario.findOneAndRemove(req.body.id, (err, usuarioBorrado) => {
+            if (err) {
+                return res.status(500).json(err);  // error cualquiera
+            }
+            res.status(200).json(usuarioBorrado);
+        });
 
-});
+    });
 
 module.exports = app;

@@ -11,6 +11,8 @@ let mdAutenticacion = require('../middelwares/autenticacion');
 
 app.get('/', (req, res) => {
     Hospital.find({})
+        .skip(Number(req.query.desde) || 0) // apartir de aqui comienza a contar, si le mando un 10 entonces con el .limit() me trae los 15
+        .limit(5) // solo envia 5 registros por cada petición
         .populate('usuarioId', 'nombre email') //
         .exec((err, hospitales) => { // TODO: aunque no le ponga props las manda, como la fecha.
 
@@ -18,11 +20,14 @@ app.get('/', (req, res) => {
                 return res.status(500).json(err);
             }
 
-            res.status(200).json({
-                    ok: true, // TODO: Aqui mejor ponemos la paginación
-                    hospitales: hospitales
-                }
-            );
+            Hospital.count({}, (err, conteo) => {
+                res.status(200).json({
+                        ok: true, // TODO: Aqui mejor ponemos la paginación
+                        hospitales: hospitales,
+                        rows: conteo
+                    }
+                );
+            });
 
         });
 });

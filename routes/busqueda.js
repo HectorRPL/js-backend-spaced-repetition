@@ -5,33 +5,28 @@ const app = express();
 // models
 
 const Hospital = require('../models/hospital');
+const Medico = require('../models/medico');
 
 app.get('/todo/:busqueda', (req, res) => {
 
-
-
-
-
-
-
-
-
-
-
-// IMPLEMENTACIÓN DE PROMESA
-
         const regex = new RegExp(req.params.busqueda, 'i'); // este regex es lo mismo que regex /busqueda, i/
 
-        buscarHospitales(regex).then(hospitales => {
+        Promise.all([
+            buscarHospitales(regex),
+            buscarMedicos(regex)
+        ]).then(respuestas => {
 
-            res.status(200).json(hospitales);
+            res.status(200).json({
+                hospitales: respuestas[0],
+                medicos: respuestas[1]
+            });
 
         });
 
     }
 );
 
-// PROMESAS
+// PROMESAS para búsquedas
 
 function buscarHospitales(regex) {
 
@@ -53,6 +48,33 @@ function buscarHospitales(regex) {
 
                 }
 
+
+            }
+        );
+
+    });
+
+}
+
+function buscarMedicos(regex) {
+
+    return new Promise((resolve, reject) => {
+
+        Medico.find(
+            {
+                nombre: regex
+            },
+            (err, medicosEncontrados) => {
+
+                if (err) {
+
+                    reject(err);
+
+                } else {
+
+                    resolve(medicosEncontrados);
+
+                }
 
             }
         );

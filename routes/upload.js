@@ -4,7 +4,20 @@ const app = express();
 
 app.use(fileUpload({}));
 
-app.put('/', (req, res) => {
+app.put('/:tipo/:usuarioId', (req, res) => {
+
+    const tipo = req.params.tipo;
+    const usuarioId = req.params.usuarioId;
+
+    // collecciones válidas
+
+    const tiposValidos = ['hospitales', 'medicos', 'usuarios'];
+
+    if (tiposValidos.indexOf(tipo) > 0) {
+        return res.status(400).json({
+            mensaje: 'Tipo de collection no válida.'
+        });
+    }
 
     if (!req.files) {
 
@@ -15,8 +28,6 @@ app.put('/', (req, res) => {
     }
 
     // get file name
-
-    console.log({files: req.files});
 
     const archivo = req.files['']; // que raro que esté difernte a lo que está en el curso
     const nombreCortado = archivo.name.split('.');
@@ -29,10 +40,28 @@ app.put('/', (req, res) => {
         });
     }
 
-    return res.status(200).json({
-        mensaje: 'Éxito.'
-    });
+    // nombre de archivo personalizado
 
+    const nombreArchivo = `${usuarioId}-${new Date().getMilliseconds()}.${expencionArchivo}`;
+    console.log({nombreArchivo});
+
+    // Mover el archivo del temporal a un path
+
+    const path = `./uploads/${tipo}/${nombreArchivo}`;
+
+    archivo.mv(path, err => {
+
+        if (err) {
+
+            return res.status(500).json(err);
+
+        }
+
+        res.status(200).json({
+            mensaje: 'Movido.'
+        });
+
+    });
 
 
 });

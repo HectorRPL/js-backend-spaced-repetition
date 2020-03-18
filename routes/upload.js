@@ -1,6 +1,10 @@
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const app = express();
+const usuario = require('../models/usuario');
+const medico = require('../models/medico');
+const hospital = require('../models/hospital');
+const fileSistem = require('fs');
 
 app.use(fileUpload({}));
 
@@ -48,7 +52,7 @@ app.put('/:tipo/:usuarioId', (req, res) => {
 
     const path = `./uploads/${tipo}/${nombreArchivo}`;
 
-    archivo.mv(path, err => {
+    archivo.mv(path, (err) => {
 
         if (err) {
 
@@ -56,13 +60,78 @@ app.put('/:tipo/:usuarioId', (req, res) => {
 
         }
 
-        res.status(200).json({
-            mensaje: 'Movido.'
-        });
+        subirPorTipo(tipo, usuarioId, nombreArchivo, res);
 
     });
 
 
 });
+
+function subirPorTipo(tipo, usuarioId, nombreArchivo, res) {
+
+    if (tipo === 'usuarios') {
+
+        usuario.findById(usuarioId, (err, usuarioEncontrado) => {
+
+            const pathViejo = './uploads/usuarios/' + usuarioEncontrado.img;
+
+            // si existe elimina la imagen anterior
+            // console.log({pathViejo});
+            if (fileSistem.existsSync(pathViejo)) {
+
+                fileSistem.unlink(pathViejo, (err, res) => {
+
+                    if (err) {
+
+                        return res.status(500).json(err);
+
+                    }
+
+                    // console.log({res});
+
+                });
+
+            }
+
+            usuarioEncontrado.img = nombreArchivo;
+
+            usuarioEncontrado.save((err, usuarioActualizado) => {
+
+                if (err) {
+
+                    return res.status(500).json(err)
+
+                }
+
+                return res.status(200).json(usuarioActualizado);
+
+            });
+
+
+        });
+
+        return;
+    }
+
+    if (tipo === 'medicos') {
+
+        medico.findById(usuarioId, (err, medico) => {
+            const pathViejo = './uploads/medicos/' + medico.img;
+        });
+
+        return;
+    }
+
+    if (tipo === 'hospitales') {
+
+        hospital.findById(usuarioId, (err, hospital) => {
+            const pathViejo = './uploads/hospital/' + hospital.img;
+        });
+
+        return;
+    }
+
+
+}
 
 module.exports = app;

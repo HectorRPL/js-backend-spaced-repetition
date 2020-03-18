@@ -13,7 +13,7 @@ app.put('/:tipo/:usuarioId', (req, res) => {
 
     const tiposValidos = ['hospitales', 'medicos', 'usuarios'];
 
-    if (tiposValidos.indexOf(tipo) > 0) {
+    if (tiposValidos.indexOf(tipo) < 0) {
         return res.status(400).json({
             mensaje: 'Tipo de collection no válida.'
         });
@@ -43,7 +43,6 @@ app.put('/:tipo/:usuarioId', (req, res) => {
     // nombre de archivo personalizado
 
     const nombreArchivo = `${usuarioId}-${new Date().getMilliseconds()}.${expencionArchivo}`;
-    console.log({nombreArchivo});
 
     // Mover el archivo del temporal a un path
 

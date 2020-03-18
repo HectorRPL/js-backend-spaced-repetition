@@ -36,7 +36,7 @@ app.put('/:tipo/:usuarioId', (req, res) => {
     const archivo = req.files['']; // que raro que esté difernte a lo que está en el curso
     const nombreCortado = archivo.name.split('.');
     const expencionArchivo = nombreCortado[nombreCortado.length - 1];
-    const extencionesPermitidas = ['png', 'jpg', 'gif', 'jpej'];
+    const extencionesPermitidas = ['png', 'jpg', 'gif', 'jpeg'];
 
     if (extencionesPermitidas.indexOf(expencionArchivo) < 0) {
         return res.status(400).json({

@@ -25,6 +25,7 @@ let hospitalRoutes = require('./routes/hospital');
 let loginRoutes = require('./routes/login');
 let busquedaRoutes = require('./routes/busqueda');
 let uploadRoutes = require('./routes/upload');
+let getImg = require('./routes/img');
 
 // conexión a mongodb (base de datos)
 
@@ -47,6 +48,7 @@ app.use('/hospital', hospitalRoutes);
 app.use('/login', loginRoutes);
 app.use('/busqueda', busquedaRoutes);
 app.use('/upload', uploadRoutes);
+app.use('/img', getImg);
 
 app.use('/', appRoutes);
 

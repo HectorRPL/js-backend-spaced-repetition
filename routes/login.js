@@ -9,11 +9,46 @@ const SEED = require('../config/config');
 let app = express();
 let Usuario = require('../models/usuario');
 
-app.post('/', (req, res) => {
+app.post('/', async (req, res) => {
 
     // ejemplo con ASYNC AWAIT
 
-    getUsuario(req.body.email).then(value => res.status(200).json(value)); // no quiero usar promesa
+    try {
+
+        const { email, password } = req.body;
+
+        const usuarioEncontrado = await Usuario.findOne({email: email});
+
+        if (!usuarioEncontrado) {
+            throw new Error('El usuario no existe');
+        }
+
+        if (!bcrypt.compareSync(password, usuarioEncontrado.password)) {
+            throw new Error('Pass no match');
+        }
+
+        const token = jwt.sign(
+            {
+                usuario: usuarioEncontrado // payload: https://www.youtube.com/watch?v=-VLwG2A_F4o https://es.wikipedia.org/wiki/Carga_%C3%BAtil_(inform%C3%A1tica)
+            },
+            SEED,
+            {
+                expiresIn: (60 * 60) // tiempo que dura el token en segundos
+            }
+        );
+
+        res.status(200).json({
+            token: token,
+            usuario: usuarioEncontrado // TODO: no mandes datos sensibles, aqui mandas hasta el pass
+        });
+
+    } catch (e) {
+
+        console.log(new Date(), '[ERROR] ', e.message );
+        res.status(500).json(e.message);
+
+    }
+
 
     // ejemplo con PROMISE
 
@@ -81,33 +116,5 @@ app.post('/', (req, res) => {
     */
 
 });
-
-
-async function getUsuario(email) {
-
-    try {
-
-        const usuarioEncontrado = await Usuario.findOne({email: email});
-        const token = jwt.sign(
-            {
-                usuario: usuarioEncontrado // payload: https://www.youtube.com/watch?v=-VLwG2A_F4o https://es.wikipedia.org/wiki/Carga_%C3%BAtil_(inform%C3%A1tica)
-            },
-            SEED,
-            {
-                expiresIn: (60 * 60) // tiempo que dura el token en segundos
-            }
-        );
-        return {
-            token: token,
-            usuario: usuarioEncontrado // TODO: no mandes datos sensibles, aqui mandas hasta el pass
-        }
-
-    } catch (e) {
-
-        res.status(404).json(e);
-
-    }
-
-}
 
 module.exports = app;

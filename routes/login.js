@@ -7,7 +7,7 @@ const SEED = require('../config/config');
 // const {SEED} = require('../config/config'); // o por desestructuración
 
 let app = express();
-let Usuario = require('../models/usuario');
+let Login = require('../models/user');
 
 function appHelper(callback) {
     return async (req, res) => {
@@ -24,21 +24,21 @@ app.post('/', appHelper(async (req, res) => {
 
     const { email, password } = req.body;
 
-    console.time('Usuario.findOne');
-    const usuarioEncontrado = await Usuario.findOne({email: email});
-    console.timeEnd('Usuario.findOne');
+    console.time('Login.findOne');
+    const userEncontrado = await Login.findOne({email: email});
+    console.timeEnd('Login.findOne');
 
-    if (!usuarioEncontrado) {
-        throw new Error('El usuario no existe');
+    if (!userEncontrado) {
+        throw new Error('El user no existe');
     }
 
-    if (!bcrypt.compareSync(password, usuarioEncontrado.password)) {
+    if (!bcrypt.compareSync(password, userEncontrado.password)) {
         throw new Error('Pass no match');
     }
 
     const token = jwt.sign(
         {
-            usuario: usuarioEncontrado // payload: https://www.youtube.com/watch?v=-VLwG2A_F4o https://es.wikipedia.org/wiki/Carga_%C3%BAtil_(inform%C3%A1tica)
+            user: userEncontrado // payload: https://www.youtube.com/watch?v=-VLwG2A_F4o https://es.wikipedia.org/wiki/Carga_%C3%BAtil_(inform%C3%A1tica)
         },
         SEED,
         {
@@ -48,7 +48,7 @@ app.post('/', appHelper(async (req, res) => {
 
     res.status(200).json({
         token: token,
-        usuario: usuarioEncontrado // TODO: no mandes datos sensibles, aqui mandas hasta el pass
+        user: userEncontrado // TODO: no mandes datos sensibles, aqui mandas hasta el pass
     });
 
 }));

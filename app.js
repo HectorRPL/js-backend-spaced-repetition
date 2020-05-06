@@ -27,6 +27,11 @@ let busquedaRoutes = require('./routes/busqueda');
 let uploadRoutes = require('./routes/upload');
 let getImg = require('./routes/img');
 
+// [ SPACED REPETITION APP ] IMPORT ROUTES
+
+let subjectRoutes = require('./routes/subject');
+let userRoutes = require('./routes/user');
+
 // conexión a mongodb (base de datos)
 
 const urlMongoLocal = 'mongodb://localhost:27017/hospitalDB'; // Conectarse localmente, no olvidar invocar al demonio
@@ -49,6 +54,11 @@ app.use('/login', loginRoutes);
 app.use('/busqueda', busquedaRoutes);
 app.use('/upload', uploadRoutes);
 app.use('/img', getImg);
+
+// [ SPACED REPETITION APP ] ROUTES
+
+app.use('/user', userRoutes);
+app.use('/subject', subjectRoutes);
 
 app.use('/', appRoutes);
 

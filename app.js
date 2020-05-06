@@ -13,7 +13,7 @@ let bodyParser = require('body-parser');
 let app = express(); // se define el servidor express
 
 // CORS
-app.use(cors());
+app.use(cors({credentials: true, origin: true}));
 
 // BODYPARRSER
 // un mildqwaare es una petición que una vez que app se sejecute siempre va apasar por aqui

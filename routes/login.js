@@ -1,4 +1,5 @@
 let express = require('express');
+let cors = require('cors');
 let bcrypt = require('bcryptjs');
 let jwt = require('jsonwebtoken'); // https://github.com/auth0/node-jsonwebtoken
 const SEED = require('../config/config');
@@ -8,6 +9,12 @@ const SEED = require('../config/config');
 
 let app = express();
 let Login = require('../models/user');
+
+// CORS
+let corsOptions = {
+    origin: 'https://app-spaced-repetition.herokuapp.com',
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 
 function appHelper(callback) {
     return async (req, res) => {
@@ -20,7 +27,7 @@ function appHelper(callback) {
     }
 }
 
-app.post('/', appHelper(async (req, res) => {
+app.post('/', cors(corsOptions), appHelper(async (req, res) => {
 
     const { email, password } = req.body;
 

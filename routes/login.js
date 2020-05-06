@@ -16,6 +16,10 @@ let corsOptions = {
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 
+app.listen(80, function () {
+    console.log('CORS-enabled web server listening on port 80')
+})
+
 function appHelper(callback) {
     return async (req, res) => {
         try {

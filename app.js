@@ -4,7 +4,6 @@ const PORT = process.env.PORT || 3000;
 // required
 
 let express = require('express');
-let cors = require('cors');
 let mongoose = require('mongoose');
 let bodyParser = require('body-parser');
 
@@ -12,9 +11,6 @@ let bodyParser = require('body-parser');
 
 let app = express(); // se define el servidor express
 
-
-// CORS
-app.use(cors());
 
 // BODYPARRSER
 // un mildqwaare es una petición que una vez que app se sejecute siempre va apasar por aqui

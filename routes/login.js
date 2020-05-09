@@ -47,8 +47,14 @@ app.post('/', appHelper(async (req, res) => {
     );
 
     res.status(200).json({
-        token: token,
-        user: userEncontrado // TODO: no mandes datos sensibles, aqui mandas hasta el pass
+        id: userEncontrado._id,
+        name: null, // TODO => no hay name
+        email: null,
+        password: null,
+        role: null,
+        created: null,
+        update: null, // TODO => falta que al momento de crear se ponga la fecha de creación
+        token: token // TODO => enviarlo en headers
     });
 
 }));

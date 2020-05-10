@@ -47,7 +47,7 @@ app.post('/', appHelper(async (req, res) => {
     );
 
     res.status(200).json({
-        id: userEncontrado._id,
+        _id: userEncontrado._id,
         name: null, // TODO => no hay name
         email: null,
         password: null,

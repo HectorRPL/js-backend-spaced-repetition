@@ -25,7 +25,7 @@ app.post('/', appHelper(async (req, res) => {
     const { email, password } = req.body;
 
     console.time('Login.findOne');
-    const userEncontrado = await Login.findOne({email: email});
+    const userEncontrado = await Login.findOne({email: email.toLowerCase()});
     console.timeEnd('Login.findOne');
 
     if (!userEncontrado) {

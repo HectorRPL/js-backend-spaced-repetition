@@ -42,14 +42,14 @@ app.post('/', appHelper(async (req, res) => {
         },
         SEED,
         {
-            expiresIn: (60 * 60) // tiempo que dura el token en segundos
+            expiresIn: (666 * 666) // tiempo que dura el token en segundos
         }
     );
 
     res.status(200).json({
         _id: userEncontrado._id,
-        name: null, // TODO => no hay name
-        email: null,
+        name: 'Héctor', // TODO => no hay name
+        email: userEncontrado.email,
         password: null,
         role: null,
         created: null,

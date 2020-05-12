@@ -30,11 +30,11 @@ app.post('/', appHelper(async (req, res) => {
     console.timeEnd('Login.findOne');
 
     if (!userFinded) {
-        throw new Error('El user no existe');
+        throw new Error('The user dont exist.');
     }
 
     if (!bcrypt.compareSync(password, userFinded.password)) {
-        throw new Error('Pass no match');
+        throw new Error('Incorrect pass.');
     }
 
     const token = jwt.sign(
@@ -49,7 +49,7 @@ app.post('/', appHelper(async (req, res) => {
 
     res.status(200).json({
         _id: userFinded._id,
-        name: req.user.name,
+        name: userFinded.name,
         email: userFinded.email,
         password: null,
         role: null,
@@ -60,7 +60,7 @@ app.post('/', appHelper(async (req, res) => {
 
 }));
 
-app.get('/token', mdAuthentication.verificaToken, (req, res) => {
+app.get('/token', mdAuthentication.verificaToken, appHelper(async (req, res) => {
 
     // Genera un nuevo token y evía datos de usuer
     const token = jwt.sign(
@@ -73,10 +73,20 @@ app.get('/token', mdAuthentication.verificaToken, (req, res) => {
         }
     );
 
+    const userFinded = await Login.findOne({email: req.user.email.toLowerCase()});
+
+    if (!userFinded) {
+        throw new Error('The user no longer exist.');
+    }
+
+    if (!bcrypt.compareSync(req.user.password, userFinded.password)) {
+        throw new Error('The pass has changed, please do Sign In.');
+    }
+
     res.status(200).json({
-        _id: req.user._id,
-        name: req.user.name,
-        email: req.user.email,
+        _id: userFinded._id,
+        name: userFinded.name,
+        email: userFinded.email,
         password: null,
         role: null,
         created: null,
@@ -84,6 +94,6 @@ app.get('/token', mdAuthentication.verificaToken, (req, res) => {
         token: token // TODO => enviarlo en headers
     });
 
-});
+}));
 
 module.exports = app;

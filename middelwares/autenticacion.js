@@ -15,7 +15,7 @@ exports.verificaToken = function(req, res, next) {
 
         }
 
-        req.usuario = decoded.usuario;
+        req.user = decoded.user;
 
         next(); // necesario el next porque si no aquí se apra y no continua con lo demás
         // return res.status(200).json(decoded);  // decoded es el usuario logueado

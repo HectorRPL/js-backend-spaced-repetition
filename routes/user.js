@@ -15,7 +15,7 @@ app.get('/', (req, res, next) => { // TODO: de momento el next no lo usamos, per
 
         User.find(
             {}, // trae todos los user
-            'role _id nombre email img') // tes para traer todos los campos menos el pass
+            'role _id name email img') // tes para traer todos los campos menos el pass
             .skip(desde) // apartir de aqui comienza a contar, si le mando un 10 entonces con el .limit() me trae los 15
             .limit(5) // solo envia 5 registros por cada petición
             .exec( // TODO: sería importante conocer que es esto porque veo que se usa mucho en mongosse
@@ -73,7 +73,7 @@ app.post(
         let body = req.body;
 
         let user = new User({
-            nombre: body.nombre,
+            name: 'Student',
             email: body.email,
             password: bcrypt.hashSync(body.password, 10), // los passwors se tienen que encriptar
             role: body.role
@@ -107,7 +107,7 @@ app.put(
                 return res.status(404).json(err); // el user no existe
             }
 
-            userEncontrado.nombre = req.body.nombre;
+            userEncontrado.name = req.body.name;
             userEncontrado.email = req.body.email;
             userEncontrado.role = req.body.role;
             userEncontrado.update = new Date();

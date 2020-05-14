@@ -54,8 +54,8 @@ app.post('/', appHelper(async (req, res) => {
         password: null,
         role: null,
         created: null,
-        update: null, // TODO => falta que al momento de crear se ponga la fecha de creación
-        token: token // TODO => enviarlo en headers
+        update: null,
+        token: token
     });
 
 }));
@@ -65,7 +65,7 @@ app.get('/token', mdAuthentication.verificaToken, appHelper(async (req, res) => 
     // Genera un nuevo token y evía datos de usuer
     const token = jwt.sign(
         {
-            usuer: req.user
+            user: req.user
         },
         SEED,
         {
@@ -79,7 +79,9 @@ app.get('/token', mdAuthentication.verificaToken, appHelper(async (req, res) => 
         throw new Error('The user no longer exist.');
     }
 
-    if (!bcrypt.compareSync(req.user.password, userFinded.password)) {
+
+    //  TODO: tiene que ser con !bcrypt.compareSync(password, userFinded.password)
+    if (req.user.password !== userFinded.password) {
         throw new Error('The pass has changed, please do Sign In.');
     }
 
@@ -90,8 +92,8 @@ app.get('/token', mdAuthentication.verificaToken, appHelper(async (req, res) => 
         password: null,
         role: null,
         created: null,
-        update: null, // TODO => falta que al momento de crear se ponga la fecha de creación
-        token: token // TODO => enviarlo en headers
+        update: null,
+        token: token
     });
 
 }));

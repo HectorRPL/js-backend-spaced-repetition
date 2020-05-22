@@ -19,11 +19,11 @@ app.get('/', (req, res) => {
                 return res.status(500).json(err);
             }
 
-            Subject.count({}, (err, conteo) => {
+            Subject.count({}, (err, count) => {
                 res.status(200).json({
                         ok: true, // TODO: Aqui mejor ponemos la paginación
                         subjectes: subjectes,
-                        rows: conteo
+                        rows: count
                     }
                 );
             });
@@ -38,18 +38,18 @@ app.post(
     mdAutenticacion.verificaToken,
     (req, res) => {
         const subject = new Subject({
-            nombre: req.body.nombre,
-            usuarioId: req.body.usuarioId
+            name: req.body.name,
+            userId: req.body.userId
         });
 
-        subject.save((err, subjectCreado) => {
+        subject.save((err, subjectCreated) => {
             if (err) {
 
                 return res.status(500).json(err);
 
             }
 
-            res.status(200).json(subjectCreado);
+            res.status(200).json(subjectCreated);
         });
     });
 
@@ -61,16 +61,16 @@ app.put(
     mdAutenticacion.verificaToken,
     (req, res) => {
 
-        Subject.findById(req.params.id, (err, subjectEncontrado) => {
+        Subject.findById(req.params.id, (err, subjectFinded) => {
 
-            if (!subjectEncontrado) {
+            if (!subjectFinded) {
                 return res.status(404).json(err); // el usuario no existe
             }
 
-            subjectEncontrado.nombre = req.body.nombre;
-            subjectEncontrado.update = new Date();
+            subjectFinded.name = req.body.name;
+            subjectFinded.update = new Date();
 
-            subjectEncontrado.save((err, subjectEncontrado) => {
+            subjectFinded.save((err, subjectFinded) => {
 
                 if (err) {
                     return res.status(500).json(err);  // error cualquiera
@@ -79,7 +79,7 @@ app.put(
                 const usuarioToken = req.usuario;
                 // console.log({usuarioToken});
 
-                res.status(200).json(subjectEncontrado);
+                res.status(200).json(subjectFinded);
 
             });
 
@@ -93,13 +93,13 @@ app.delete(
     mdAutenticacion.verificaToken,
     (req, res) => {
 
-        Subject.findOneAndRemove(req.body.id, (err, subjectEliminado) => {
+        Subject.findOneAndRemove(req.body.id, (err, subjectDeleted) => {
 
             if (err) {
                 return res.status(500).json(err);  // error cualquiera
             }
 
-            res.status(200).json(subjectEliminado);
+            res.status(200).json(subjectDeleted);
 
         });
 

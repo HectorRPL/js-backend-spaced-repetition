@@ -18,6 +18,13 @@ const subjectSchema = new Schema({
         description: {
             type: String
         },
+        label: {
+            type: [String],
+            required: [
+                true,
+                'Al menos una etiqueta es requerida.'
+            ]
+        },
         created: {
             type: Date,
             default: new Date()

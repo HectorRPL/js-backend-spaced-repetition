@@ -1,6 +1,5 @@
 const express = require('express');
 
-
 const app = express();
 
 const Subject = require('../models/subject');
@@ -8,7 +7,6 @@ const Subject = require('../models/subject');
 let mdAutenticacion = require('../middelwares/autenticacion');
 
 // gel all
-
 app.get('/', (req, res) => {
     Subject.find({})
         .skip(Number(req.query.desde) || 0) // apartir de aqui comienza a contar, si le mando un 10 entonces con el .limit() me trae los 15
@@ -31,78 +29,56 @@ app.get('/', (req, res) => {
         });
 });
 
-// post
-
-app.post(
-    '',
-    mdAutenticacion.verificaToken,
-    (req, res) => {
-        const subject = new Subject({
-            name: req.body.name,
-            userId: req.body.userId
-        });
-
-        subject.save((err, subjectCreated) => {
-            if (err) {
-
-                return res.status(500).json(err);
-
-            }
-
-            res.status(200).json(subjectCreated);
-        });
-    });
-
-
-// put
-
-app.put(
-    '/:id',
-    mdAutenticacion.verificaToken,
-    (req, res) => {
-
+// get one
+app.get('/:id', (req, res) => {
         Subject.findById(req.params.id, (err, subjectFinded) => {
-
             if (!subjectFinded) {
                 return res.status(404).json(err); // el usuario no existe
             }
-
-            subjectFinded.name = req.body.name;
-            subjectFinded.update = new Date();
-
-            subjectFinded.save((err, subjectFinded) => {
-
-                if (err) {
-                    return res.status(500).json(err);  // error cualquiera
-                }
-
-                const usuarioToken = req.usuario;
-                // console.log({usuarioToken});
-
-                res.status(200).json(subjectFinded);
-
-            });
-
+            res.status(200).json(subjectFinded);
         });
-
     }
 );
 
-app.delete(
-    '/:id',
-    mdAutenticacion.verificaToken,
-    (req, res) => {
+// post
+app.post('', mdAutenticacion.verificaToken, (req, res) => {
 
-        Subject.findOneAndRemove(req.body.id, (err, subjectDeleted) => {
+    const subject = new Subject({
+        userId: req.body.userId,
+        title: req.body.title,
+        description: req.body.description
+    });
 
-            if (err) {
-                return res.status(500).json(err);  // error cualquiera
+    subject.save((err, subjectCreated) => {
+        if (err) {
+            return res.status(500).json(err);
+        }
+        res.status(200).json(subjectCreated);
+    });
+
+});
+
+// put
+app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
+        Subject.findById(req.params.id, (err, subjectFinded) => {
+            if (!subjectFinded) {
+                return res.status(404).json(err); // el usuario no existe
             }
-
-            res.status(200).json(subjectDeleted);
-
+            const newSubject = {
+                userId: subjectFinded.userId,
+                title: req.body.title,
+                description: req.body.description,
+                created: subjectFinded.created,
+                update: new Date()
+            };
+            subjectFinded.save((err, newSubject) => {
+                if (err) {
+                    return res.status(500).json(err);  // error cualquiera
+                }
+                const usuarioToken = req.usuario;
+                res.status(200).json(newSubject);
+            });
         });
-
     }
 );
 
@@ -115,9 +91,3 @@ module.exports = app; // NUNCA OLVIDAR EXPORTAR. Propongo el siguinete procedime
 4 INMEDIATAMENTE después el export: module.exports = app;
 5. FIN DE LA PUTA DISCUSIÓN
 */
-
-
-
-
-
-

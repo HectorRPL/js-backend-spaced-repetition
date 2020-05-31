@@ -23,7 +23,7 @@ const subjectSchema = new Schema({
             required: [
                 true,
                 'Al menos una etiqueta es requerida.'
-            ]
+            ] // TODO esta madre no funcina, no le mandaba nada y no manda error
         },
         created: {
             type: Date,

@@ -25,9 +25,9 @@ app.post('/', appHelper(async (req, res) => {
 
     const {email, password} = req.body;
 
-    console.time('Login.findOne');
+    // console.time('Login.findOne'); // quité los consoles, porque estaban tronando.
     const userFinded = await Login.findOne({email: email.toLowerCase()});
-    console.timeEnd('Login.findOne');
+    // console.timeEnd('Login.findOne'); // quité los consoles, porque estaban tronando.
 
     if (!userFinded) {
         throw new Error('The user dont exist.');

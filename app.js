@@ -34,6 +34,8 @@ let getImg = require('./routes/img');
 // [ SPACED REPETITION APP ] IMPORT ROUTES
 
 let subjectRoutes = require('./routes/subject');
+let questionRoutes = require('./routes/question');
+let subjectQuestionRoutes = require('./routes/subjectQuestion');
 let userRoutes = require('./routes/user');
 
 // conexión a mongodb (base de datos)
@@ -64,6 +66,8 @@ app.use('/img', getImg);
 
 app.use('/user', userRoutes);
 app.use('/subject', subjectRoutes);
+app.use('/question', questionRoutes);
+app.use('/subjectQuestion', subjectQuestionRoutes);
 
 app.use('/', appRoutes);
 

@@ -29,6 +29,33 @@ app.get('/', (req, res) => {
         });
 });
 
+// gel all by user id
+app.get('/userId/:userId', (req, res) => {
+    const QUERY = {
+        userId: req.params.userId
+    };
+
+    Subject.find(QUERY)
+        .skip(Number(req.query.desde) || 0) // apartir de aqui comienza a contar, si le mando un 10 entonces con el .limit() me trae los 15
+        .limit(1000) // solo envia 5 registros por cada petición
+        .exec((err, subjects) => { // TODO: aunque no le ponga props las manda, como la fecha.
+
+            if (err) {
+                return res.status(500).json(err);
+            }
+
+            Subject.count({}, (err, count) => {
+                res.status(200).json({
+                        ok: true, // TODO: Aqui mejor ponemos la paginación
+                        subjects: subjects,
+                        rows: count
+                    }
+                );
+            });
+
+        });
+});
+
 // get one
 app.get('/:id', (req, res) => {
         Subject.findById(req.params.id, (err, subjectFinded) => {
@@ -46,7 +73,8 @@ app.post('', mdAutenticacion.verificaToken, (req, res) => {
     const subject = new Subject({
         userId: req.body.userId,
         title: req.body.title,
-        description: req.body.description
+        description: req.body.description,
+        label: req.body.label
     });
 
     subject.save((err, subjectCreated) => {

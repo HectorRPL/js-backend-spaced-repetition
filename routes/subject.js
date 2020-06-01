@@ -29,10 +29,10 @@ app.get('/', (req, res) => {
         });
 });
 
-// gel all by user id
-app.get('/userId/:userId', (req, res) => {
+// gel all by list id
+app.get('/listId/:listId', (req, res) => {
     const QUERY = {
-        userId: req.params.userId
+        listId: req.params.listId
     };
 
     Subject.find(QUERY)
@@ -68,10 +68,14 @@ app.get('/:id', (req, res) => {
 );
 
 // post
-app.post('', mdAutenticacion.verificaToken, (req, res) => {
+app.post(
+    '',
+    mdAutenticacion.verificaToken,
+    (req, res) => {
 
     const subject = new Subject({
         userId: req.body.userId,
+        listId: req.body.listId,
         title: req.body.title,
         description: req.body.description,
         label: req.body.label
@@ -87,7 +91,10 @@ app.post('', mdAutenticacion.verificaToken, (req, res) => {
 });
 
 // put
-app.put('/:id', mdAutenticacion.verificaToken, (req, res) => {
+app.put(
+    '/:id',
+    mdAutenticacion.verificaToken,
+    (req, res) => {
         Subject.findById(req.params.id, (err, subjectFinded) => {
             if (!subjectFinded) {
                 return res.status(404).json(err); // el usuario no existe

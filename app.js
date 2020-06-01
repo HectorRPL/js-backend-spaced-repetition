@@ -33,6 +33,7 @@ let getImg = require('./routes/img');
 
 // [ SPACED REPETITION APP ] IMPORT ROUTES
 
+let listRoutes = require('./routes/list');
 let subjectRoutes = require('./routes/subject');
 let questionRoutes = require('./routes/question');
 let subjectQuestionRoutes = require('./routes/subjectQuestion');
@@ -65,6 +66,7 @@ app.use('/img', getImg);
 // [ SPACED REPETITION APP ] ROUTES
 
 app.use('/user', userRoutes);
+app.use('/list', listRoutes);
 app.use('/subject', subjectRoutes);
 app.use('/question', questionRoutes);
 app.use('/subjectQuestion', subjectQuestionRoutes);

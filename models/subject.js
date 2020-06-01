@@ -8,6 +8,11 @@ const subjectSchema = new Schema({
             ref: 'User',
             required: true
         },
+        listId: {
+            type: Schema.Types.ObjectId,
+            ref: 'List',
+            required: true
+        },
         title: {
             type: String,
             required: [

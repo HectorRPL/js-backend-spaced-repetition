@@ -2,6 +2,7 @@ let jwt = require('jsonwebtoken'); // https://github.com/auth0/node-jsonwebtoken
 const SEED = require('../config/config');
 
 // verificar token
+// TODO: cambiar a inglés
 
 exports.verificaToken = function(req, res, next) {
 

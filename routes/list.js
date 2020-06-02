@@ -37,7 +37,7 @@ app.get(
     List.find(QUERY)
         .skip(Number(req.query.desde) || 0) // apartir de aqui comienza a contar, si le mando un 10 entonces con el .limit() me trae los 15
         .limit(1000) // solo envia 5 registros por cada petición
-        .exec((err, lists) => { // TODO: aunque no le ponga props las manda, como la fecha.
+        .exec((err, list) => { // TODO: aunque no le ponga props las manda, como la fecha.
 
             if (err) {
                 return res.status(500).json(err);
@@ -46,7 +46,7 @@ app.get(
             List.count({}, (err, count) => {
                 res.status(200).json({
                         ok: true, // TODO: Aqui mejor ponemos la paginación
-                        lists: lists,
+                        list: list,
                         rows: count
                     }
                 );

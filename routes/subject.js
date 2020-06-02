@@ -48,7 +48,7 @@ app.get('/listId/:listId', (req, res) => {
                 res.status(200).json({
                         ok: true, // TODO: Aqui mejor ponemos la paginación
                         subjects: subjects,
-                        rows: count
+                        rows: count // TODO falta mandar la paginación we, no mames!
                     }
                 );
             });

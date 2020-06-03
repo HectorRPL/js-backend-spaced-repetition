@@ -6,7 +6,7 @@ const mdAutenticacion = require('../middelwares/autenticacion');
 // post
 app.post(
     '',
-    mdAutenticacion.verificaToken,
+    /*mdAutenticacion.verificaToken,*/
     (req, res) => {
 
     const list = new List({

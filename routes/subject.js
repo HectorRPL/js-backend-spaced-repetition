@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
 });
 
 // gel all by list id
-app.get('/listId/:listId', (req, res) => {
+app.get('/list/:listId', (req, res) => {
     const QUERY = {
         listId: req.params.listId
     };

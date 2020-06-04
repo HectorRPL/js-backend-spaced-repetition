@@ -70,13 +70,13 @@ app.get('/:id', (req, res) => {
 // post
 app.post(
     '',
-    mdAutenticacion.verificaToken,
+    /*mdAutenticacion.verificaToken,*/
     (req, res) => {
 
     const subject = new Subject({
         userId: req.body.userId,
         listId: req.body.listId,
-        title: req.body.title,
+        name: req.body.name,
         description: req.body.description,
         label: req.body.label
     });
@@ -101,7 +101,7 @@ app.put(
             }
             const newSubject = {
                 userId: subjectFinded.userId,
-                title: req.body.title,
+                name: req.body.name,
                 description: req.body.description,
                 created: subjectFinded.created,
                 update: new Date()

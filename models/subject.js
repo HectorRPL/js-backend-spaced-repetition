@@ -13,7 +13,7 @@ const subjectSchema = new Schema({
             ref: 'List',
             required: true
         },
-        title: {
+        name: {
             type: String,
             required: [
                 true,

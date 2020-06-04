@@ -57,9 +57,9 @@ app.get(
 
 // get one
 app.get(
-    '/list/:listId',
+    '/:listId',
     (req, res) => {
-        List.findById(req.params.id, (err, listFinded) => {
+        List.findById(req.params.listId, (err, listFinded) => {
             if (!listFinded) {
                 return res.status(404).json(err); // el usuario no existe
             }

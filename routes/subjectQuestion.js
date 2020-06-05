@@ -6,8 +6,8 @@ const mdAutenticacion = require('../middelwares/autenticacion');
 
 // post
 app.post(
-    '/subjectId/:subjectId',
-    mdAutenticacion.verificaToken,
+    '/subject/:subjectId',
+    /*mdAutenticacion.verificaToken,*/
     (req, res) => {
 
         const question = new Question({
@@ -54,8 +54,8 @@ app.get('/:subjectId', (req, res) => {
             subjectId: req.params.subjectId
         })
             .skip(Number(req.query.desde) || 0) // apartir de aqui comienza a contar, si le mando un 10 entonces con el .limit() me trae los 15
-            .limit(5) // solo envia 5 registros por cada petición
-            .populate('questionId', 'question') //
+            .limit(1000) // solo envia 5 registros por cada petición
+            .populate('questionId') //
             .exec((err, subjectQuestions) => { // TODO: aunque no le ponga props las manda, como la fecha.
 
                 if (err) {
@@ -65,7 +65,7 @@ app.get('/:subjectId', (req, res) => {
                 SubjectQuestion.count({}, (err, conteo) => {
                     res.status(200).json({
                             ok: true, // TODO: Aqui mejor ponemos la paginación
-                            subjectQuestions: subjectQuestions,
+                            list: subjectQuestions,
                             rows: conteo
                         }
                     );

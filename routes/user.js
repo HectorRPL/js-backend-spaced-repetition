@@ -17,7 +17,7 @@ app.get('/', (req, res, next) => { // TODO: de momento el next no lo usamos, per
             {}, // trae todos los user
             'role _id name email img') // tes para traer todos los campos menos el pass
             .skip(desde) // apartir de aqui comienza a contar, si le mando un 10 entonces con el .limit() me trae los 15
-            .limit(5) // solo envia 5 registros por cada petición
+            .limit(1000) // solo envia 5 registros por cada petición
             .exec( // TODO: sería importante conocer que es esto porque veo que se usa mucho en mongosse
                 (err, user) => {
 

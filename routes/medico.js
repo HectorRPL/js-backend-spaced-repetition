@@ -12,7 +12,7 @@ const mdAutenticacion = require('../middelwares/autenticacion');
 app.get('/', (req, res) => {
     Medico.find({})
         .skip(Number(req.query.desde) || 0) // apartir de aqui comienza a contar, si le mando un 10 entonces con el .limit() me trae los 15
-        .limit(5) // solo envia 5 registros por cada petición
+        .limit(1000) // solo envia 5 registros por cada petición
         .populate('usuarioId', 'nombre email')
         .populate('hospitalId')
         .exec((err, medicos) => {

@@ -1,15 +1,13 @@
-let express = require('express');
-
-let bcrypt = require('bcryptjs');
-
-let app = express();
-
-let User = require('../models/user');
-
-let mdAutenticacion = require('../middelwares/autenticacion');
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const app = express();
+const User = require('../models/user');
+const mdAutenticacion = require('../middelwares/autenticacion');
 
 // get all
-app.get('/', (req, res, next) => { // TODO: de momento el next no lo usamos, pero debo saber que es.
+app.get(
+    '/',
+    (req, res, next) => { // TODO: de momento el next no lo usamos, pero debo saber que es.
 
         const desde = Number(req.query.desde) || 0;
 
@@ -73,7 +71,7 @@ app.post(
         let body = req.body;
 
         let user = new User({
-            name: 'Student',
+            name: body.name ? body.name : 'I am smart',
             email: body.email,
             password: bcrypt.hashSync(body.password, 10), // los passwors se tienen que encriptar
             role: body.role
@@ -85,7 +83,6 @@ app.post(
                 return res.status(500).json(err);
 
             }
-
             res.status(200).json(userCreado);
         });
 
@@ -128,6 +125,7 @@ app.put(
 
             });
         });
+
     });
 
 // delete

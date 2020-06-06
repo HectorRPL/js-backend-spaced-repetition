@@ -21,81 +21,86 @@ function appHelper(callback) {
     }
 }
 
-app.post('/', appHelper(async (req, res) => {
+app.post(
+    '/',
+    appHelper(async (req, res) => {
 
-    const {email, password} = req.body;
+        const {email, password} = req.body;
 
-    // console.time('Login.findOne'); // quité los consoles, porque estaban tronando.
-    const userFinded = await Login.findOne({email: email.toLowerCase()});
-    // console.timeEnd('Login.findOne'); // quité los consoles, porque estaban tronando.
+        // console.time('Login.findOne'); // quité los consoles, porque estaban tronando.
+        const userFinded = await Login.findOne({email: email.toLowerCase()});
+        // console.timeEnd('Login.findOne'); // quité los consoles, porque estaban tronando.
 
-    if (!userFinded) {
-        throw new Error('The user dont exist.');
-    }
-
-    if (!bcrypt.compareSync(password, userFinded.password)) {
-        throw new Error('Incorrect pass.');
-    }
-
-    const token = jwt.sign(
-        {
-            user: userFinded // payload: https://www.youtube.com/watch?v=-VLwG2A_F4o https://es.wikipedia.org/wiki/Carga_%C3%BAtil_(inform%C3%A1tica)
-        },
-        SEED,
-        {
-            expiresIn: (666 * 666) // tiempo que dura el token en segundos
+        if (!userFinded) {
+            throw new Error('The user dont exist.');
         }
-    );
 
-    res.status(200).json({
-        _id: userFinded._id,
-        name: userFinded.name,
-        email: userFinded.email,
-        password: null,
-        role: null,
-        created: null,
-        update: null,
-        token: token
-    });
-
-}));
-
-app.get('/token', mdAuthentication.verificaToken, appHelper(async (req, res) => {
-
-    // Genera un nuevo token y evía datos de usuer
-    const token = jwt.sign(
-        {
-            user: req.user
-        },
-        SEED,
-        {
-            expiresIn: 14400
+        if (!bcrypt.compareSync(password, userFinded.password)) {
+            throw new Error('Incorrect pass.');
         }
-    );
 
-    const userFinded = await Login.findOne({email: req.user.email.toLowerCase()});
+        const token = jwt.sign(
+            {
+                user: userFinded // payload: https://www.youtube.com/watch?v=-VLwG2A_F4o https://es.wikipedia.org/wiki/Carga_%C3%BAtil_(inform%C3%A1tica)
+            },
+            SEED,
+            {
+                expiresIn: (666 * 666) // tiempo que dura el token en segundos
+            }
+        );
 
-    if (!userFinded) {
-        throw new Error('The user no longer exist.');
-    }
+        res.status(200).json({
+            _id: userFinded._id,
+            name: userFinded.name,
+            email: userFinded.email,
+            password: null,
+            role: null,
+            created: null,
+            update: null,
+            token: token
+        });
+
+    }));
+
+app.get(
+    '/token',
+    mdAuthentication.verificaToken,
+    appHelper(async (req, res) => {
+
+        // Genera un nuevo token y evía datos del usuer
+        const token = jwt.sign(
+            {
+                user: req.user
+            },
+            SEED,
+            {
+                expiresIn: 14400
+            }
+        );
+
+        const userFinded = await Login.findOne({email: req.user.email.toLowerCase()});
+
+        if (!userFinded) {
+            throw new Error('The user no longer exist.');
+        }
 
 
-    //  TODO: tiene que ser con !bcrypt.compareSync(password, userFinded.password)
-    if (req.user.password !== userFinded.password) {
-        throw new Error('The pass has changed, please do Sign In.');
-    }
+        //  TODO: tiene que ser con !bcrypt.compareSync(password, userFinded.password)
+        if (req.user.password !== userFinded.password) {
+            throw new Error('The pass has changed, please do Sign In.');
+        }
 
-    res.status(200).json({
-        _id: userFinded._id,
-        name: userFinded.name,
-        email: userFinded.email,
-        password: null,
-        role: null,
-        created: null,
-        update: null,
-        token: token
-    });
+        res.status(200).json({
+            _id: userFinded._id,
+            name: userFinded.name,
+            email: userFinded.email,
+            password: null,
+            role: null,
+            created: null,
+            update: null,
+            token: token
+        });
 
-}));
+    }));
 
 module.exports = app;

@@ -3,6 +3,8 @@ const bcrypt = require('bcryptjs');
 const app = express();
 const User = require('../models/user');
 const mdAutenticacion = require('../middelwares/autenticacion');
+const SEED = require('../config/config');
+const jwt = require('jsonwebtoken'); // https://github.com/auth0/node-jsonwebtoken
 
 // get all
 app.get(
@@ -74,7 +76,7 @@ app.post(
             name: body.name ? body.name : 'I am smart',
             email: body.email,
             password: bcrypt.hashSync(body.password, 10), // los passwors se tienen que encriptar
-            role: body.role
+            role: "USER_ROLE"
         });
 
         user.save((err, userCreado) => {
@@ -83,7 +85,31 @@ app.post(
                 return res.status(500).json(err);
 
             }
-            res.status(200).json(userCreado);
+
+            const token = jwt.sign(
+                {
+                    user: userCreado // payload: https://www.youtube.com/watch?v=-VLwG2A_F4o https://es.wikipedia.org/wiki/Carga_%C3%BAtil_(inform%C3%A1tica)
+                },
+                SEED,
+                {
+                    expiresIn: (666 * 666) // tiempo que dura el token en segundos
+                }
+            );
+
+
+            const respUserCreated = {
+                _id: userCreado._id,
+                name: userCreado.name,
+                email: userCreado.email,
+                password: null,
+                img: userCreado.img,
+                role: userCreado.role,
+                created: userCreado.created,
+                update: userCreado.update,
+                token: token,
+            };
+
+            res.status(200).json(respUserCreated);
         });
 
     });

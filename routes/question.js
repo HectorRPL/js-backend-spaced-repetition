@@ -45,20 +45,19 @@ app.get('/:id', (req, res) => {
 // put
 app.put(
     '/:id',
-    mdAutenticacion.verificaToken,
+    /*mdAutenticacion.verificaToken,*/
     (req, res) => {
 
         Question.findById(req.params.id, (err, questionFinded) => {
+
             if (!questionFinded) {
                 return res.status(404).json(err); // el usuario no existe
             }
-            const newQuestion = {
-                userId: questionFinded.userId,
-                title: req.body.title,
-                description: req.body.description,
-                created: questionFinded.created,
-                update: new Date()
-            };
+
+                questionFinded.question = req.body.question;
+                questionFinded.answer = req.body.answer;
+                questionFinded.update = new Date();
+
             questionFinded.save((err, newQuestion) => {
                 if (err) {
                     return res.status(500).json(err);  // error cualquiera

@@ -145,7 +145,6 @@ app.put(
                 userActualizado.role = null; // no es buena idea enviar estps datos, se soluciona con microservices
 
                 const userToken = req.user;
-                // console.log({userToken});
 
                 res.status(200).json(userActualizado);
 

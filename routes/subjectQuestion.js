@@ -48,7 +48,7 @@ Un get all podría funcionar para una consulta de todas las materias al azar, po
 O una especie de seleccion de temas, algo por estilo, aqui hay de donde cortar
 */
 
-// gel all
+// gel all by subjectId
 app.get('/:subjectId', (req, res) => {
         SubjectQuestion.find({
             subjectId: req.params.subjectId

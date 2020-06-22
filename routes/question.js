@@ -5,7 +5,7 @@ const mdAutenticacion = require('../middelwares/autenticacion');
 
 // post
 app.post(
-    'subjectId/:subjectId',
+    'subjectId/:subjectId', // TODO: Checa esto, no se está usando el subjectId
     mdAutenticacion.verificaToken,
     (req, res) => {
 

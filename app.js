@@ -37,6 +37,7 @@ let listRoutes = require('./routes/list');
 let subjectRoutes = require('./routes/subject');
 let questionRoutes = require('./routes/question');
 let subjectQuestionRoutes = require('./routes/subjectQuestion');
+let testRoutes = require('./routes/test');
 let userRoutes = require('./routes/user');
 
 // conexión a mongodb (base de datos)
@@ -70,6 +71,7 @@ app.use('/list', listRoutes);
 app.use('/subject', subjectRoutes);
 app.use('/question', questionRoutes);
 app.use('/subjectQuestion', subjectQuestionRoutes);
+app.use('/test', testRoutes);
 
 app.use('/', appRoutes);
 

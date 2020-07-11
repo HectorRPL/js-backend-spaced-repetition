@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const recorddSchema = new Schema(
+const recordSchema = new Schema(
     {
         userId: {
             type: Schema.Types.ObjectId,
@@ -33,9 +33,9 @@ const recorddSchema = new Schema(
         }
     },
     {
-        collection: 'recordd' // mongoose crea las collections en prural, pero yo las voy a crear en singular.
+        collection: 'record' // mongoose crea las collections en prural, pero yo las voy a crear en singular.
     }
 );
 
 
-module.exports = mongoose.model('Recordd', recorddSchema);
+module.exports = mongoose.model('Record', recordSchema);

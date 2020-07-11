@@ -70,7 +70,7 @@ app.get('/:id', (req, res) => {
 // post
 app.post(
     '',
-    /*mdAutenticacion.verificaToken,*/
+    mdAutenticacion.verificaToken,
     (req, res) => {
 
     const subject = new Subject({

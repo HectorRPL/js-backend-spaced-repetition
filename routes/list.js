@@ -6,7 +6,7 @@ const mdAutenticacion = require('../middelwares/autenticacion');
 // post
 app.post(
     '',
-    /*mdAutenticacion.verificaToken,*/
+    mdAutenticacion.verificaToken,
     (req, res) => {
 
     const list = new List({
@@ -58,6 +58,7 @@ app.get(
 // get one
 app.get(
     '/:listId',
+    mdAutenticacion.verificaToken,
     (req, res) => {
         List.findById(req.params.listId, (err, listFinded) => {
             if (!listFinded) {

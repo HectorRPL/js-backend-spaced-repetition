@@ -4,9 +4,11 @@ const SEED = require('../config/config');
 // verificar token
 // TODO: cambiar a inglés
 
-exports.verificaToken = function(req, res, next) {
+exports.verificaToken = function (req, res, next) {
 
-    let token = req.query.token;
+    console.log('LLEGO UN TOKEN: '); // req.header('user-token')
+
+    let token = req.header('user-token');
 
     jwt.verify(token, SEED, (err, decoded) => {
 

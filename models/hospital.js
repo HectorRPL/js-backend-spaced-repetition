@@ -24,11 +24,11 @@ const hospitalSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'Usuario'
         },
-        created:  {
+        created: {
             type: Date,
             default: new Date()
         },
-        update:  {
+        update: {
             type: Date,
             require: false
         }

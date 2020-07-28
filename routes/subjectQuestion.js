@@ -7,7 +7,7 @@ const mdAutenticacion = require('../middelwares/autenticacion');
 // post
 app.post(
     '/subject/:subjectId',
-    /*mdAutenticacion.verificaToken,*/
+    mdAutenticacion.verificaToken,
     (req, res) => {
 
         const question = new Question({

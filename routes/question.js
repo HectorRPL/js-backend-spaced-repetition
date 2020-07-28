@@ -45,7 +45,7 @@ app.get('/:id', (req, res) => {
 // put
 app.put(
     '/:id',
-    /*mdAutenticacion.verificaToken,*/
+    mdAutenticacion.verificaToken,
     (req, res) => {
 
         Question.findById(req.params.id, (err, questionFinded) => {

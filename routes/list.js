@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const List = require('../models/list');
+const Subject = require('../models/subject');
 const mdAutenticacion = require('../middelwares/autenticacion');
 
 // post
@@ -8,22 +9,22 @@ const mdAutenticacion = require('../middelwares/autenticacion');
 app.post(
  '',
  mdAutenticacion.verificaToken,
- (req, res) => {
-
-   const list = new List({
-     userId: req.body.userId,
-     name: req.body.name,
-     description: req.body.description,
-     label: req.body.label
-   });
-
-   list.save((err, listCreated) => {
-     if (err) {
-       return res.status(500).json(err);
-     }
-     res.status(200).json(listCreated);
-   });
-
+ async (req, res) => {
+   try {
+     const { userId, name, description, label } = req.body;
+     const list = new List({
+       userId: userId,
+       name: name,
+       description: description,
+       label: label
+     });
+     const listCreated = await list.save(list);
+     const subjectCreated = await createSubject(userId, listCreated._id, name);
+     return res.status(200).json(listCreated);
+   } catch (e) {
+     console.log(e);
+     return res.status(500).json(e);
+   }
  });
 
 // gel all by user id
@@ -100,6 +101,21 @@ app.put(
    });
  }
 );
+
+
+async function createSubject(userId, listId, name) {
+  const subjectByDefault = new Subject({
+    userId: userId,
+    listId: listId,
+    name: `Mi primer bloque de preguntas de ${name}`,
+    description: '',
+    label: ''
+  });
+  console.log('llega aqui', subjectByDefault);
+  const subjectCreated = await subjectByDefault.save(subjectByDefault);
+  console.log('no mames', subjectCreated);
+  return subjectCreated;
+}
 
 module.exports = app; // NUNCA OLVIDAR EXPORTAR. Propongo el siguinete procedimeinto:
 

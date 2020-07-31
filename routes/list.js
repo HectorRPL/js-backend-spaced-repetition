@@ -12,15 +12,15 @@ app.post(
  async (req, res) => {
    try {
      const { userId, name, description, label } = req.body;
-     const list = new List({
+     const listObj = new List({
        userId: userId,
        name: name,
        description: description,
        label: label
      });
-     const listCreated = await list.save(list);
-     const subjectCreated = await createSubject(userId, listCreated._id, name);
-     return res.status(200).json(listCreated);
+     const list = await listObj.save(listObj);
+     const subject = await createSubject(userId, list._id, name);
+     return res.status(200).json({ list, subject });
    } catch (e) {
      console.log(e);
      return res.status(500).json(e);
@@ -111,9 +111,7 @@ async function createSubject(userId, listId, name) {
     description: '',
     label: ''
   });
-  console.log('llega aqui', subjectByDefault);
   const subjectCreated = await subjectByDefault.save(subjectByDefault);
-  console.log('no mames', subjectCreated);
   return subjectCreated;
 }
 

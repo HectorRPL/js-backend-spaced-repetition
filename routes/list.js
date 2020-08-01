@@ -19,7 +19,7 @@ app.post(
        label: label
      });
      const list = await listObj.save(listObj);
-     const subject = await createSubject(userId, list._id, name);
+     const subject = await createSubject(userId, list._id, name, label);
      return res.status(200).json({ list, subject });
    } catch (e) {
      console.log(e);
@@ -102,14 +102,13 @@ app.put(
  }
 );
 
-
-async function createSubject(userId, listId, name) {
+async function createSubject(userId, listId, name, label) {
   const subjectByDefault = new Subject({
     userId: userId,
     listId: listId,
     name: `Mi primer bloque de preguntas de ${name}`,
     description: '',
-    label: ''
+    label: label
   });
   const subjectCreated = await subjectByDefault.save(subjectByDefault);
   return subjectCreated;

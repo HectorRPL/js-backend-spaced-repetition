@@ -32,8 +32,8 @@ O una especie de seleccion de temas, algo por estilo, aqui hay de donde cortar
 */
 
 // get one
-app.get('/:id', (req, res) => {
-        Question.findById(req.params.id, (err, questionFinded) => {
+app.get('/:questionId', (req, res) => {
+        Question.findById(req.params.questionId, (err, questionFinded) => {
             if (!questionFinded) {
                 return res.status(404).json(err); // el usuario no existe
             }

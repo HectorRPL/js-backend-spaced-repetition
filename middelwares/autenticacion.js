@@ -6,23 +6,25 @@ const SEED = require('../config/config');
 
 exports.verificaToken = function (req, res, next) {
 
-    console.log('LLEGO UN TOKEN: '); // req.header('user-token')
+  // console.log('LLEGO UN TOKEN: '); // req.header('user-token')
 
-    let token = req.header('user-token');
+  let token = req.header('user-token');
 
-    jwt.verify(token, SEED, (err, decoded) => {
+  jwt.verify(token, SEED, (err, decoded) => {
 
-        if (err) {
+    console.log({'req.user': req.user});
 
-            return res.status(401).json(err);  // error usuario no autorizado (token incorrecto)
+    if (err) {
 
-        }
+      return res.status(401).json(err);  // error usuario no autorizado (token incorrecto)
 
-        req.user = decoded.user;
+    }
 
-        next(); // necesario el next porque si no aquí se apra y no continua con lo demás
-        // return res.status(200).json(decoded);  // decoded es el usuario logueado
+    req.user = decoded.user;
 
-    });
+    next(); // necesario el next porque si no aquí se apra y no continua con lo demás
+    // return res.status(200).json(decoded);  // decoded es el usuario logueado
+
+  });
 };
 

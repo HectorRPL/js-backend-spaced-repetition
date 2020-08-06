@@ -1,5 +1,6 @@
 let jwt = require('jsonwebtoken'); // https://github.com/auth0/node-jsonwebtoken
 const SEED = require('../config/config');
+const User = require('../models/user');
 
 // verificar token
 // TODO: cambiar a inglés

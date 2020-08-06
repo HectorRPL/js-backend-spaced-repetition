@@ -11,7 +11,7 @@ app.post(
  mdAutenticacion.verificaToken,
  async (req, res) => {
    try {
-     const { userId, name, description, label } = req.body;
+     const {userId, name, description, label} = req.body;
      const listObj = new List({
        userId: userId,
        name: name,
@@ -20,7 +20,7 @@ app.post(
      });
      const list = await listObj.save(listObj);
      const subject = await createSubject(userId, list._id, name, label);
-     return res.status(200).json({ list, subject });
+     return res.status(200).json({list, subject});
    } catch (e) {
      console.log(e);
      return res.status(500).json(e);
@@ -106,7 +106,7 @@ async function createSubject(userId, listId, name, label) {
   const subjectByDefault = new Subject({
     userId: userId,
     listId: listId,
-    name: `Mi primer bloque de preguntas de ${name}`,
+    name: `Primer bloque de preguntas de la lista ${name}`,
     description: '',
     label: label
   });

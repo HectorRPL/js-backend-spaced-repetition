@@ -32,7 +32,6 @@ app.get('/', (req, res) => {
 // gel all by list id
 app.get(
  '/list/:listId',
- mdAutenticacion.verificaToken,
  (req, res) => {
    const QUERY = {
      listId: req.params.listId

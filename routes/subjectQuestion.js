@@ -75,5 +75,33 @@ app.get('/:subjectId', (req, res) => {
     }
 );
 
+// Public
+
+// gel all by subjectId
+app.get(
+ '/public/:subjectId', (req, res) => {
+   const {subjectId} = req.params;
+   SubjectQuestion.find({
+     subjectId: subjectId
+   })
+    .skip(Number(req.query.desde) || 0) // apartir de aqui comienza a contar, si le mando un 10 entonces con el .limit() me trae los 15
+    .limit(1000) // solo envia 5 registros por cada petición
+    .populate('questionId') //
+    .exec((err, subjectQuestions) => { // TODO: aunque no le ponga props las manda, como la fecha.
+       if (err) {
+         return res.status(500).json(err);
+       }
+       SubjectQuestion.count({}, (err, conteo) => {
+         res.status(200).json({
+            ok: true, // TODO: Aqui mejor ponemos la paginación
+            list: subjectQuestions,
+            rows: conteo
+          }
+         );
+       });
+     }
+    );
+ }
+);
 
 module.exports = app; // NUNCA OLVIDAR EXPORTAR
